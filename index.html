@@ -94,11 +94,24 @@
     <script>
         // 立即嘗試開啟 Facebook App
         const reelId = '1356530112583020';
-        const appUrl = `fb://reel/${reelId}`;
-        const webUrl = 'https://www.facebook.com/reel/1356530112583020/';
+        const webUrl = `https://www.facebook.com/reel/${reelId}`;
 
         // 偵測是否為 iOS
         const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+        const isAndroid = /Android/.test(navigator.userAgent);
+
+        // 嘗試多種深度連結格式
+        let appUrl;
+        if (isIOS) {
+            // iOS 使用 intent URL
+            appUrl = `fb://reel/${reelId}`;
+        } else if (isAndroid) {
+            // Android 使用 intent URL
+            appUrl = `intent://www.facebook.com/reel/${reelId}#Intent;package=com.facebook.katana;scheme=https;end`;
+        } else {
+            // 桌面或其他裝置直接使用網頁版
+            appUrl = webUrl;
+        }
 
         // 嘗試開啟 app
         window.location = appUrl;
