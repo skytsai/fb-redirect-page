@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>開啟 Facebook Reel</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 400px;
+        }
+        .fb-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #1877f2;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background: #1877f2;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #166fe5;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1877f2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #loading-msg {
+            color: #1877f2;
+            font-weight: 600;
+        }
+        #fallback {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="fb-icon">📱</div>
+
+        <div id="loading-msg">
+            <div class="loading"></div>
+            <p>正在開啟 Facebook App...</p>
+        </div>
+
+        <div id="fallback">
+            <h1>開啟 Facebook Reel</h1>
+            <p>如果沒有自動開啟，請點擊下方按鈕</p>
+            <a href="https://www.facebook.com/reel/1356530112583020/" class="btn">
+                前往 Facebook
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 立即嘗試開啟 Facebook App
+        const appUrl = 'fb://facewebmodal/f?href=https://www.facebook.com/reel/1356530112583020/';
+        const webUrl = 'https://www.facebook.com/reel/1356530112583020/';
+
+        // 偵測是否為 iOS
+        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+        // 嘗試開啟 app
+        window.location = appUrl;
+
+        // 設定時間檢查
+        let appOpened = false;
+
+        // 監聽頁面可見性變化
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                appOpened = true;
+            }
+        });
+
+        // 1.5秒後檢查是否成功開啟 app
+        setTimeout(function() {
+            if (!appOpened) {
+                // App 沒有開啟，顯示備用選項
+                document.getElementById('loading-msg').style.display = 'none';
+                document.getElementById('fallback').style.display = 'block';
+            }
+        }, 1500);
+
+        // 3秒後如果還在頁面上，直接導向網頁版
+        setTimeout(function() {
+            if (!appOpened && !document.hidden) {
+                window.location = webUrl;
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
